@@ -110,18 +110,6 @@
                                     @enderror
                                 </div>
                                 <div class="mb-3">
-                                    <label for="no_rekam_medik"
-                                        class="form-label @error('no_rekam_medik') is-invalid @enderror">No Rekam
-                                        Medik</label>
-                                    <input type="text" class="form-control" id="no_rekam_medik"
-                                        name="no_rekam_medik"value="{{ old('no_rekam_medik', $kunjungan->no_rekam_medik) }}">
-                                    @error('no_rekam_medik')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-                                </div>
-                                <div class="mb-3">
                                     <label for="nik"
                                         class="form-label @error('nik') is-invalid @enderror">NIK</label>
                                     <input type="text" class="form-control" id="nik" name="nik"

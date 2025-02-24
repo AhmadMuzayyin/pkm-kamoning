@@ -144,28 +144,10 @@
                             <label for="obat-search" class="col-form-label fw-semibold">Cari Obat</label>
                         </div>
                         <div class="col-md-7">
-                            <div class="input-group">
-                                <input type="search" class="form-control" id="obat-search"
-                                    placeholder="Masukkan nama obat untuk mencari...">
-                                <span class="input-group-text" id="search-indicator" style="display: none;">
-                                    <span class="spinner-border spinner-border-sm" role="status"
-                                        aria-hidden="true"></span>
-                                </span>
-                            </div>
-                            <small class="form-text text-muted">Ketik minimal 3 karakter dan tunggu hasil
-                                pencarian</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Hasil pencarian obat -->
-            <div id="obat-search-results" class="row mb-3" style="display: none;">
-                <div class="col-md-8">
-                    <div class="card border p-3">
-                        <h6 class="fw-bold mb-3">Hasil Pencarian</h6>
-                        <div id="obat-results-list">
-                            <!-- Hasil pencarian akan ditampilkan di sini -->
+                            <select class="form-control" id="obat-search">
+                                <option value="">Cari obat...</option>
+                            </select>
+                            <small class="form-text text-muted">Ketik minimal 3 karakter untuk mencari obat</small>
                         </div>
                     </div>
                 </div>
@@ -215,107 +197,56 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
-            let searchTimeout = null;
             let selectedObats = [];
 
-            $('#obat-search').on('keyup', function() {
-                const searchTerm = $(this).val();
-                $('#obat-error-message').remove();
-
-                if (searchTerm.length < 3) {
-                    $('#obat-search-results').hide();
-                    return;
+            // Inisialisasi Select2
+            $('#obat-search').select2({
+                theme: 'bootstrap-5',
+                width: '100%',
+                minimumInputLength: 3,
+                language: {
+                    inputTooShort: function() {
+                        return 'Ketik minimal 3 karakter';
+                    },
+                    searching: function() {
+                        return 'Mencari...';
+                    },
+                    noResults: function() {
+                        return 'Tidak ada hasil';
+                    }
+                },
+                ajax: {
+                    url: "{{ route('farmasi.search') }}",
+                    dataType: 'json',
+                    delay: 500,
+                    data: function(params) {
+                        return {
+                            term: params.term
+                        };
+                    },
+                    processResults: function(data) {
+                        return data
+                    },
+                    cache: true
                 }
-
-                if (searchTimeout) {
-                    clearTimeout(searchTimeout);
+            }).on('select2:select', function(e) {
+                const obatData = e.params.data;
+                if (isObatAlreadySelected(obatData.id)) {
+                    alert('Obat ini sudah dipilih!');
+                } else {
+                    addObatToSelection(obatData);
                 }
-
-                searchTimeout = setTimeout(function() {
-                    $('#search-indicator').show();
-
-                    $.ajax({
-                        url: "{{ route('obat.search') }}",
-                        type: 'GET',
-                        data: {
-                            term: searchTerm
-                        },
-                        dataType: 'json',
-                        success: function(data) {
-                            $('#search-indicator').hide();
-
-                            if (data.success && data.obat) {
-                                displaySearchResults([data.obat]);
-                            } else {
-                                $('#obat-search-results').hide();
-
-                                if (data.message) {
-                                    $('<div id="obat-error-message" class="alert alert-warning mt-2">' +
-                                            data.message + '</div>')
-                                        .insertAfter('#obat-search').parent();
-                                }
-                            }
-                        },
-                        error: function() {
-                            $('#search-indicator').hide();
-                            $('<div id="obat-error-message" class="alert alert-danger mt-2">Terjadi kesalahan saat mencari obat</div>')
-                                .insertAfter('#obat-search').parent();
-                        }
-                    });
-                }, 500);
+                $(this).val(null).trigger('change');
             });
-
-            function displaySearchResults(obats) {
-                const $resultsList = $('#obat-results-list');
-                $resultsList.empty();
-
-                obats.forEach(function(obat) {
-                    const $template = $('#search-result-template').children().first().clone();
-
-                    $template.find('.result-obat-nama').text(obat.nama);
-                    $template.find('.result-obat-stok').text('Stok: ' + obat.stok);
-
-                    const $addButton = $template.find('.btn-add-obat');
-
-                    $addButton.data('obat', obat);
-                    $addButton.on('click', function() {
-                        const obatData = $(this).data('obat');
-
-                        if (isObatAlreadySelected(obatData.id)) {
-                            alert('Obat ini sudah dipilih!');
-                            return;
-                        }
-
-                        addObatToSelection(obatData);
-                        $('#obat-search').val('');
-                        $('#obat-search-results').hide();
-                    });
-
-                    $resultsList.append($template);
-                });
-
-                $('#obat-search-results').show();
-            }
 
             function isObatAlreadySelected(obatId) {
                 return selectedObats.some(obat => obat.id === obatId);
             }
 
             function addObatToSelection(obatData) {
-                if (isObatAlreadySelected(obatData.id)) {
-                    alert('Obat ini sudah dipilih!');
-                    return;
-                }
-
                 selectedObats.push(obatData);
-
-                // Buat elemen baru
                 const $template = $('#obat-item-template').children().first().clone();
 
-                // Hapus hidden input yang mungkin ada sebelumnya
-                $template.find('.obat-id-input').remove();
-
-                // Tambahkan hidden input yang baru
                 $template.find('.col-md-5').first().append(
                     $('<input>', {
                         type: 'hidden',
@@ -325,18 +256,19 @@
                     })
                 );
 
-                // Set properti lainnya seperti biasa
-                $template.find('.obat-nama').text(obatData.nama);
+                // Update nama input jumlah obat juga
+                $template.find('.jumlah-input').attr('name', 'jumlah_obats[]');
+
+                $template.find('.obat-nama').text(obatData.text);
                 $template.find('.obat-stok').text('Stok: ' + obatData.stok);
-                $template.find('.obat-id-input').val(obatData.id);
 
                 const $jumlahInput = $template.find('.jumlah-input');
                 $jumlahInput.attr('max', obatData.stok);
 
+                // Handler untuk tombol increment/decrement
                 $template.find('.btn-increase').on('click', function() {
                     const currentVal = parseInt($jumlahInput.val());
                     const max = parseInt($jumlahInput.attr('max'));
-
                     if (currentVal < max) {
                         $jumlahInput.val(currentVal + 1);
                     }
@@ -344,12 +276,12 @@
 
                 $template.find('.btn-decrease').on('click', function() {
                     const currentVal = parseInt($jumlahInput.val());
-
                     if (currentVal > 1) {
                         $jumlahInput.val(currentVal - 1);
                     }
                 });
 
+                // Validasi input jumlah
                 $jumlahInput.on('change', function() {
                     const max = parseInt($(this).attr('max'));
                     const val = parseInt($(this).val());
@@ -358,19 +290,17 @@
                         $(this).val(max);
                         alert('Jumlah obat tidak boleh melebihi stok yang tersedia');
                     }
-
                     if (val < 1) {
                         $(this).val(1);
                     }
                 });
 
+                // Handler untuk tombol hapus
                 $template.find('.btn-remove-obat').on('click', function() {
                     const $item = $(this).closest('.obat-item');
                     const obatId = $item.find('.obat-id-input').val();
                     selectedObats = selectedObats.filter(obat => obat.id != obatId);
                     $item.remove();
-                    reindexObatInputs();
-
                     updateEmptyState();
                 });
 
@@ -392,47 +322,15 @@
 
             updateEmptyState();
 
+            // Validasi form sebelum submit
             $('form').on('submit', function(e) {
                 if (selectedObats.length === 0) {
                     e.preventDefault();
                     alert('Pilih setidaknya satu obat sebelum menyimpan!');
                     return false;
                 }
-
-                // Prevent double submission
                 $(this).find('button[type="submit"]').prop('disabled', true);
             });
-
-            function reindexObatInputs() {
-                // Hapus semua input yang ada
-                $('input[name="obat_ids[]"]').each(function(index) {
-                    $(this).attr('name', 'obat_ids[' + index + ']');
-                });
-
-                $('input[name="jumlah_obats[]"]').each(function(index) {
-                    $(this).attr('name', 'jumlah_obats[' + index + ']');
-                });
-            }
         });
-
-
-        function incrementJumlah() {
-            const input = document.getElementById('jumlah_obat');
-            const max = parseInt(input.getAttribute('max'));
-            const currentVal = parseInt(input.value);
-
-            if (currentVal < max) {
-                input.value = currentVal + 1;
-            }
-        }
-
-        function decrementJumlah() {
-            const input = document.getElementById('jumlah_obat');
-            const currentVal = parseInt(input.value);
-
-            if (currentVal > 1) {
-                input.value = currentVal - 1;
-            }
-        }
     </script>
 @endpush

@@ -1,8 +1,18 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="fs-4 fw-semibold text-dark mb-0">
-            {{ __('Dashboard') }}
-        </h2>
+        @if (auth()->user()->role == 'Petugas Loket')
+            <div class="row justify-content-end">
+                <div class="col-md-6 d-flex justify-content-center">
+                    <a href="{{ route('loket.index') }}">
+                        <x-b-primary-button class="rounded-circle">
+                            <span class="material-symbols-outlined">
+                                add
+                            </span>
+                        </x-b-primary-button>
+                    </a>
+                </div>
+            </div>
+        @endif
     </x-slot>
 
     <div class="py-5">
@@ -12,16 +22,7 @@
                     <div class="card bg-main">
                         <div class="card-body">
                             @if (auth()->user()->role == 'Petugas Loket')
-                                {{-- row menu --}}
-                                <div class="row justify-content-center">
-                                    <div class="col-md-6 d-flex justify-content-center">
-                                        <a href="{{ route('loket.index') }}">
-                                            <x-b-primary-button>
-                                                {{ __('Data Loket') }}
-                                            </x-b-primary-button>
-                                        </a>
-                                    </div>
-                                </div>
+                                @include('pages.loket.dashboard')
                             @endif
                             {{-- row menu --}}
                             @if (auth()->user()->role == 'Dokter')

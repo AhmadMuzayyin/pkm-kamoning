@@ -12,7 +12,7 @@ class LaporanExport implements FromCollection, WithHeadings, WithMapping
 
     public function __construct($laporan)
     {
-        $this->laporan = $laporan;
+        $this->laporan = $laporan->groupBy('id');
     }
 
     public function collection()
@@ -25,6 +25,7 @@ class LaporanExport implements FromCollection, WithHeadings, WithMapping
         return [
             'No',
             'Tanggal Periksa',
+            'Poli',
             'No Rekam Medik',
             'NIK',
             'Nama Pasien',
@@ -32,26 +33,32 @@ class LaporanExport implements FromCollection, WithHeadings, WithMapping
             'Jenis Kelamin',
             'Jenis Bayar',
             'Diagnosa',
-            'Nama Obat'
+            'Daftar Obat'
         ];
     }
 
-    public function map($item): array
+    public function map($items): array
     {
-        static $row = 0;
-        $row++;
+        static $rowNumber = 0;
+        $rowNumber++;
+
+        $firstItem = $items->first();
+        $obatList = $items->map(function ($item) {
+            return $item->nama_obat ? $item->nama_obat . " (" . $item->jumlah_obat . ")" : '-';
+        })->join(', ');
 
         return [
-            $row,
-            $item->tanggal_periksa,
-            $item->no_rekam_medik,
-            $item->nik,
-            $item->nama_pasien,
-            $item->umur,
-            $item->jenis_kelamin,
-            $item->jenis_bayar,
-            $item->diagnosa ?? '-',
-            $item->nama_obat ?? '-'
+            $rowNumber,
+            $firstItem->tanggal_periksa,
+            $firstItem->poli,
+            $firstItem->no_rekam_medik,
+            $firstItem->nik,
+            $firstItem->nama_pasien,
+            $firstItem->umur,
+            $firstItem->jenis_kelamin,
+            $firstItem->jenis_bayar,
+            $firstItem->diagnosa ?? '-',
+            $obatList
         ];
     }
 }

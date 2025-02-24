@@ -26,6 +26,7 @@
                                             <tr class="tr">
                                                 <th>No</th>
                                                 <th>Tgl Periksa</th>
+                                                <th>Poli</th>
                                                 <th>No Rekam Medik</th>
                                                 <th>NIK</th>
                                                 <th>Nama Pasien</th>
@@ -37,18 +38,35 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($laporan as $index => $item)
+                                            @php
+                                                $grouped = $laporan->groupBy('id');
+                                                $rowNumber = 0;
+                                            @endphp
+
+                                            @foreach ($grouped as $pendaftaranId => $items)
+                                                @php
+                                                    $rowNumber++;
+                                                    $firstItem = $items->first();
+                                                    $obatList = $items
+                                                        ->map(function ($item) {
+                                                            return $item->nama_obat
+                                                                ? $item->nama_obat . ' (' . $item->jumlah_obat . ')'
+                                                                : '-';
+                                                        })
+                                                        ->join(', ');
+                                                @endphp
                                                 <tr>
-                                                    <td>{{ $index + 1 }}</td>
-                                                    <td>{{ $item->tanggal_periksa }}</td>
-                                                    <td>{{ $item->no_rekam_medik }}</td>
-                                                    <td>{{ $item->nik }}</td>
-                                                    <td>{{ $item->nama_pasien }}</td>
-                                                    <td>{{ $item->umur }}</td>
-                                                    <td>{{ $item->jenis_kelamin }}</td>
-                                                    <td>{{ $item->jenis_bayar }}</td>
-                                                    <td>{{ $item->diagnosa ?? '-' }}</td>
-                                                    <td>{{ $item->nama_obat ?? '-' }}</td>
+                                                    <td>{{ $rowNumber }}</td>
+                                                    <td>{{ $firstItem->tanggal_periksa }}</td>
+                                                    <td>{{ $firstItem->poli }}</td>
+                                                    <td>{{ $firstItem->no_rekam_medik }}</td>
+                                                    <td>{{ $firstItem->nik }}</td>
+                                                    <td>{{ $firstItem->nama_pasien }}</td>
+                                                    <td>{{ $firstItem->umur }}</td>
+                                                    <td>{{ $firstItem->jenis_kelamin }}</td>
+                                                    <td>{{ $firstItem->jenis_bayar }}</td>
+                                                    <td>{{ $firstItem->diagnosa ?? '-' }}</td>
+                                                    <td>{{ $obatList }}</td>
                                                 </tr>
                                             @endforeach
                                         </tbody>

@@ -27,8 +27,8 @@
         </div>
 
         <div class="mb-3">
-            <label for="email" class="form-label">{{ __('Email') }}</label>
-            <input type="email" class="form-control @error('email') is-invalid @enderror" id="email"
+            <label for="username" class="form-label">{{ __('Username') }}</label>
+            <input type="username" class="form-control @error('username') is-invalid @enderror" id="username"
                 name="email" value="{{ old('email', $user->email) }}" required autocomplete="username">
             @error('email')
                 <div class="invalid-feedback">{{ $message }}</div>

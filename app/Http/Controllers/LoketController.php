@@ -40,7 +40,6 @@ class LoketController extends Controller
             'tanggal_lahir' => 'required|date|before_or_equal:today',
             'umur' => 'required|integer|min:0|max:120', // Batasan umur 0 - 120 tahun
             'nik' => 'required|numeric|digits:16|unique:kunjungans,nik', // NIK harus 16 digit dan unik
-            'no_rekam_medik' => 'required|integer|unique:kunjungans,no_rekam_medik',
             'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
             'jenis_pelayanan' => 'required|in:BPJS,Umum',
             'provinsi' => 'required|string|max:255',
@@ -49,6 +48,7 @@ class LoketController extends Controller
             'kelurahan' => 'required|string|max:255',
         ]);
         try {
+            $request->merge(['no_rekam_medik' => rand(10000000, 99999999)]);
             Kunjungan::create($request->all());
             return redirect()->route('loket.index')->with('success', 'Data berhasil disimpan!');
         } catch (\Throwable $th) {
@@ -100,8 +100,9 @@ class LoketController extends Controller
     {
         try {
             $kunjungan->delete();
-            return redirect()->route('loket.index')->with('success', 'Data berhasil dihapus!');
+            return redirect()->back()->with('success', 'Data berhasil dihapus!');
         } catch (\Throwable $th) {
+            dd($th->getMessage());
             return redirect()->back()->with('error', $th->getMessage());
         }
     }
@@ -116,8 +117,34 @@ class LoketController extends Controller
         try {
             $request->merge(['kunjungan_id' => $kunjungan->id]);
             $kunjungan->pendaftaran()->create($request->all());
-            return redirect()->back()->with('success', 'Pendaftaran berhasil!');
+            return redirect('pasien?poli=' . $request['poli'])->with('success', 'Pendaftaran berhasil!');
         } catch (\Throwable $th) {
+            dd($th->getMessage());
+            return redirect()->back()->with('error', $th->getMessage());
+        }
+    }
+    public function updatePendaftaran(Request $request, Pendaftaran $pendaftaran)
+    {
+        $request->validate([
+            'jenis_bayar' => 'required|in:BPJS,Umum',
+            'poli' => 'required|in:Umum,Gigi,KIA',
+            'tanggal_periksa' => 'required|date|after_or_equal:today',
+        ]);
+
+        try {
+            $pendaftaran->update($request->all());
+            return redirect()->back()->with('success', 'Data pendaftaran berhasil diubah!');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', $th->getMessage());
+        }
+    }
+    public function destroyPendaftaran(Pendaftaran $pendaftaran)
+    {
+        try {
+            $pendaftaran->delete();
+            return redirect()->back()->with('success', 'Data berhasil dihapus!');
+        } catch (\Throwable $th) {
+            dd($th->getMessage());
             return redirect()->back()->with('error', $th->getMessage());
         }
     }

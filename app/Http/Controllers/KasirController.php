@@ -41,6 +41,7 @@ class KasirController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Pembayaran berhasil diproses',
+            'data' => $pembayaran,
         ]);
     }
 

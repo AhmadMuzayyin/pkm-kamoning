@@ -43,7 +43,7 @@ class PasienController extends Controller
     public function periksa($id)
     {
         $pasien = new Pendaftaran();
-        $pasien->update(['status' => 'Pemeriiksaan']);
+        $pasien->update(['status' => 'Pemeriksaan']);
         $pasien = $pasien->with('kunjungan')
             ->where('id', $id)
             ->first();
@@ -51,23 +51,14 @@ class PasienController extends Controller
     }
     public function store(Request $request, $id)
     {
-        $obat_ids = [];
-        $jumlah_obats = [];
+        $obat_ids = array_values(array_filter($request->obat_ids ?? []));
+        $jumlah_obats = array_values(array_filter($request->jumlah_obats ?? []));
 
-        if ($request->has('obat_ids') && is_array($request->obat_ids)) {
-            foreach ($request->obat_ids as $key => $obat_id) {
-                if (!empty($obat_id) && isset($request->jumlah_obats[$key])) {
-                    $obat_ids[] = $obat_id;
-                    $jumlah_obats[] = $request->jumlah_obats[$key];
-                }
-            }
-        }
-
+        // Merge data yang sudah dibersihkan ke request
         $request->merge([
             'obat_ids' => $obat_ids,
             'jumlah_obats' => $jumlah_obats
         ]);
-
         $validator = Validator::make($request->all(), [
             'tinggi_badan' => 'required|numeric',
             'berat_badan' => 'required|numeric',
@@ -80,6 +71,7 @@ class PasienController extends Controller
             'jumlah_obats' => 'required|array|min:1',
             'jumlah_obats.*' => 'required|numeric|min:1',
         ]);
+
         if ($validator->fails()) {
             return redirect()->back()
                 ->withErrors($validator)

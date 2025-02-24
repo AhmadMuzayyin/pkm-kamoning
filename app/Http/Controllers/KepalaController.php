@@ -69,20 +69,20 @@ class KepalaController extends Controller
             ->select(
                 'pendaftarans.id',
                 'pendaftarans.tanggal_periksa',
+                'pendaftarans.poli',
                 'kunjungans.no_rekam_medik',
                 'kunjungans.nik',
                 'kunjungans.nama_pasien',
                 'kunjungans.umur',
                 'kunjungans.jenis_kelamin',
-                'kunjungans.alamat',
-                'kunjungans.tanggal_lahir',
-                'kunjungans.jenis_pelayanan',
                 'pendaftarans.jenis_bayar',
                 'pemeriksaans.diagnosa',
-                'obats.nama as nama_obat'
+                'obats.nama as nama_obat',
+                'reseps.jumlah as jumlah_obat'
             )
             ->where('pendaftarans.tanggal_periksa', $tanggal)
             ->where('pendaftarans.status', 'Selesai')
+            ->orderBy('pendaftarans.id')
             ->get();
     }
 
@@ -96,21 +96,21 @@ class KepalaController extends Controller
             ->select(
                 'pendaftarans.id',
                 'pendaftarans.tanggal_periksa',
+                'pendaftarans.poli',
                 'kunjungans.no_rekam_medik',
                 'kunjungans.nik',
                 'kunjungans.nama_pasien',
                 'kunjungans.umur',
                 'kunjungans.jenis_kelamin',
-                'kunjungans.alamat',
-                'kunjungans.tanggal_lahir',
-                'kunjungans.jenis_pelayanan',
                 'pendaftarans.jenis_bayar',
                 'pemeriksaans.diagnosa',
-                'obats.nama as nama_obat'
+                'obats.nama as nama_obat',
+                'reseps.jumlah as jumlah_obat'
             )
             ->whereMonth('pendaftarans.tanggal_periksa', $month)
             ->whereYear('pendaftarans.tanggal_periksa', $year)
             ->where('pendaftarans.status', 'Selesai')
+            ->orderBy('pendaftarans.id')
             ->get();
     }
 
@@ -124,20 +124,20 @@ class KepalaController extends Controller
             ->select(
                 'pendaftarans.id',
                 'pendaftarans.tanggal_periksa',
+                'pendaftarans.poli',
                 'kunjungans.no_rekam_medik',
                 'kunjungans.nik',
                 'kunjungans.nama_pasien',
                 'kunjungans.umur',
                 'kunjungans.jenis_kelamin',
-                'kunjungans.alamat',
-                'kunjungans.tanggal_lahir',
-                'kunjungans.jenis_pelayanan',
                 'pendaftarans.jenis_bayar',
                 'pemeriksaans.diagnosa',
-                'obats.nama as nama_obat'
+                'obats.nama as nama_obat',
+                'reseps.jumlah as jumlah_obat'
             )
             ->whereYear('pendaftarans.tanggal_periksa', $year)
             ->where('pendaftarans.status', 'Selesai')
+            ->orderBy('pendaftarans.id')
             ->get();
     }
 
@@ -151,20 +151,20 @@ class KepalaController extends Controller
             ->select(
                 'pendaftarans.id',
                 'pendaftarans.tanggal_periksa',
+                'pendaftarans.poli',
                 'kunjungans.no_rekam_medik',
                 'kunjungans.nik',
                 'kunjungans.nama_pasien',
                 'kunjungans.umur',
                 'kunjungans.jenis_kelamin',
-                'kunjungans.alamat',
-                'kunjungans.tanggal_lahir',
-                'kunjungans.jenis_pelayanan',
                 'pendaftarans.jenis_bayar',
                 'pemeriksaans.diagnosa',
-                'obats.nama as nama_obat'
+                'obats.nama as nama_obat',
+                'reseps.jumlah as jumlah_obat'
             )
             ->whereBetween('pendaftarans.tanggal_periksa', [$tanggalMulai, $tanggalSelesai])
             ->where('pendaftarans.status', 'Selesai')
+            ->orderBy('pendaftarans.id')
             ->get();
     }
     public function export(Request $request)

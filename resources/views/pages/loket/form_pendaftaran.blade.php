@@ -1,5 +1,15 @@
 <!-- Form Pendaftaran -->
-<div class="col-md-12">
+<div class="row">
+    <div class="col-md-12 text-end">
+        <x-b-secondary-button id="bpjs">
+            {{ __('BPJS') }}
+        </x-b-secondary-button>
+        <x-b-primary-button id="umum">
+            {{ __('Non BPJS') }}
+        </x-b-primary-button>
+    </div>
+</div>
+<div class="col-md-12 mt-2">
     <div class="card bg-light p-3">
         <h5 class="fw-bold">PENDAFTARAN</h5>
         <hr>
@@ -13,14 +23,8 @@
             <div class="row">
                 <div class="col-md-4">
                     <label for="jenis_bayar">Jenis Bayar</label>
-                    <select class="form-control" id="jenis_bayar" name="jenis_bayar">
-                        <option value="Umum"
-                            {{ $kunjungan->exists() ? ($kunjungan->jenis_pelayanan == 'Umum' ? 'selected' : '') : '' }}>
-                            Non BPJS</option>
-                        <option value="BPJS"
-                            {{ $kunjungan->exists() ? ($kunjungan->jenis_pelayanan == 'BPJS' ? 'selected' : '') : '' }}>
-                            BPJS</option>
-                    </select>
+                    <input type="text" class="form-control" id="jenis_bayar" name="jenis_bayar" readonly
+                        value="Umum">
                 </div>
                 <div class="col-md-4">
                     <label for="tgl_periksa">Tgl Pemeriksaan</label>
@@ -35,8 +39,8 @@
                             Umum</option>
                         <option value="Gigi" {{ old('poli') == 'Gigi' ? 'selected' : '' }}>
                             Gigi</option>
-                        <option value="IKIA" {{ old('poli') == 'IKIA' ? 'selected' : '' }}>
-                            IKIA</option>
+                        <option value="KIA" {{ old('poli') == 'KIA' ? 'selected' : '' }}>
+                            KIA</option>
                     </select>
                 </div>
             </div>
@@ -46,3 +50,16 @@
         </form>
     </div>
 </div>
+
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            $('#umum').click(function() {
+                $('#jenis_bayar').val('Umum');
+            });
+            $('#bpjs').click(function() {
+                $('#jenis_bayar').val('BPJS');
+            });
+        });
+    </script>
+@endpush

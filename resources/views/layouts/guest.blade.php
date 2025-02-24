@@ -14,17 +14,56 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <style>
+        .btn-primary:active {
+            background-color: #6f9e8f !important;
+        }
+
+        .btn-primary {
+            background-color: #8ac4b0;
+            color: #fff;
+            border: none;
+            padding: 0.4rem 0.4rem;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background-color: #6f9e8f;
+        }
+
+        .bg-primary {
+            background-color: #8ac4b0 !important;
+            border: #6f9e8f !important;
+            color: white !important;
+        }
+
+        .bg-main {
+            background-color: #E2E8E1 !important;
+            border: #E2E8E1 !important;
+            color: white !important;
+        }
+
+        .dt-orderable-asc.dt-orderable-desc {
+            background-color: #E2E8E1 !important;
+        }
+
+        td {
+            background-color: #E2E8E1 !important;
+            border: #E2E8E1 !important;
+        }
+
+        .page-link {
+            background-color: #E2E8E1 !important;
+            border: #6f9e8f !important;
+            color: black !important;
+        }
+    </style>
 </head>
 
-<body class="font-sans text-gray-900 antialiased">
+<body class="font-family-sans-serif">
     <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-        <div>
-            <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-            </a>
-        </div>
-
-        <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
+        <div
+            class="w-full sm:max-w-sm mt-6 px-6 py-4 bg-[#E2E8E1] shadow-md overflow-hidden sm:rounded-lg min-h-[100px]">
             {{ $slot }}
         </div>
     </div>

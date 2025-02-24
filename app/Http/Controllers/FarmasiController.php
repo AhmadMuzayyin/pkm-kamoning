@@ -116,25 +116,29 @@ class FarmasiController extends Controller
 
         if (empty($term) || strlen($term) < 3) {
             return response()->json([
-                'success' => false,
-                'message' => 'Masukkan minimal 3 karakter untuk mencari'
+                'results' => [],
+                'pagination' => ['more' => false]
             ]);
         }
 
-        $obat = Obat::where('nama', 'like', "%{$term}%")
+        $obats = Obat::where('nama', 'like', "%{$term}%")
             ->where('stok', '>', 0)
-            ->first();
-
-        if ($obat) {
-            return response()->json([
-                'success' => true,
-                'obat' => $obat
-            ]);
-        }
+            ->take(10)  // Batasi 10 hasil per request
+            ->get()
+            ->map(function ($obat) {
+                return [
+                    'id' => $obat->id,
+                    'text' => $obat->nama,  // Select2 membutuhkan field 'text' untuk ditampilkan
+                    'stok' => $obat->stok,
+                    // Tambahkan data tambahan yang mungkin diperlukan
+                    'harga' => $obat->harga,
+                    'tanggal_masuk' => $obat->tanggal_masuk
+                ];
+            });
 
         return response()->json([
-            'success' => false,
-            'message' => 'Obat tidak ditemukan atau stok habis'
+            'results' => $obats,  // Select2 mengharapkan data dalam property 'results'
+            'pagination' => ['more' => false]  // Indikator apakah masih ada data lain
         ]);
     }
 }

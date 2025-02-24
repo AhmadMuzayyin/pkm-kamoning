@@ -16,7 +16,9 @@
                                 <div class="col-md-6">
                                     <a href="{{ route('loket.create') }}">
                                         <x-b-primary-button class="float-end">
-                                            {{ __('Tambah') }}
+                                            <span class="material-symbols-outlined">
+                                                add
+                                            </span>
                                         </x-b-primary-button>
                                     </a>
                                 </div>

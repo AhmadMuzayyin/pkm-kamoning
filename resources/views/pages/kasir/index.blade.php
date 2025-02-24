@@ -99,7 +99,7 @@
                             <input type="hidden" id="total_biaya_nilai" name="total_harga">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Jumlah Pembayaran</label>
+                            <label class="form-label">Bayar</label>
                             <input type="number" class="form-control" id="pembayaran" name="pembayaran" required>
                             <div class="invalid-feedback" id="pembayaran_error"></div>
                         </div>
@@ -198,15 +198,19 @@
                         success: function(response) {
                             if (response.success) {
                                 $('#pembayaranModal').modal('hide');
-                                Swal.fire({
-                                    title: 'Berhasil!',
-                                    text: response.message,
-                                    icon: 'success',
-                                    confirmButtonText: 'OK'
-                                }).then((result) => {
-                                    if (result.isConfirmed) {
-                                        location.reload();
+                                let printWindow = window.open(
+                                    `/kasir/print-preview/${response.data.id}`, '_blank',
+                                    'width=800,height=600');
+                                let checkClosed = setInterval(function() {
+                                    if (printWindow.closed) {
+                                        clearInterval(checkClosed);
+                                        window.location.reload();
                                     }
+                                }, 500);
+
+                                // Tambahkan fallback untuk memastikan interval dibersihkan
+                                window.addEventListener('beforeunload', function() {
+                                    clearInterval(checkClosed);
                                 });
                             }
                         },

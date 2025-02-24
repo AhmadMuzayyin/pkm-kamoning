@@ -10,7 +10,11 @@
         <p><strong>Keluhan:</strong> {{ $rekam_medik?->pemeriksaan?->keluhan }}</p>
         <p><strong>Diagnosa:</strong> {{ $rekam_medik?->pemeriksaan?->diagnosa }}</p>
         <p><strong>Tindakan:</strong> {{ $rekam_medik?->tindakan?->tindakan }}</p>
-        <p><strong>Obat:</strong> {{ $rekam_medik?->resep?->obat->nama . ' - ' . $rekam_medik?->resep?->obat->jumlah }}
-        </p>
+        <p><strong>Obat:</strong></p>
+        <ul>
+            @foreach ($rekam_medik?->resep as $resep)
+                <li>{{ $resep->obat->nama . ' - ' . $resep->jumlah }}</li>
+            @endforeach
+        </ul>
     </div>
 </div>

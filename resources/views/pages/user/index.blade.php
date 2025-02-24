@@ -88,6 +88,25 @@
                             @enderror
                         </div>
                         <div class="mb-3">
+                            <label for="role" class="form-label">Jabatan</label>
+                            <select class="form-select @error('role') is-invalid @enderror" id="role"
+                                name="role" required>
+                                <option value="">-- Pilih Jabatan --</option>
+                                <option value="Kepala Rekam Medik"
+                                    {{ old('role') == 'Kepala Rekam Medik' ? 'selected' : '' }}>Kepala Rekam Medik
+                                </option>
+                                <option value="Farmasi" {{ old('role') == 'Farmasi' ? 'selected' : '' }}>Farmasi
+                                </option>
+                                <option value="Kasir" {{ old('role') == 'Kasir' ? 'selected' : '' }}>Kasir</option>
+                                <option value="Dokter" {{ old('role') == 'Dokter' ? 'selected' : '' }}>Dokter</option>
+                                <option value="Petugas Loket" {{ old('role') == 'Petugas Loket' ? 'selected' : '' }}>
+                                    Petugas Loket</option>
+                            </select>
+                            @error('role')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="mb-3">
                             <label for="username" class="form-label">Username</label>
                             <input type="text" class="form-control @error('username') is-invalid @enderror"
                                 id="username" name="username" value="{{ old('username') }}" required>
@@ -107,25 +126,6 @@
                             <label for="password_confirmation" class="form-label">Konfirmasi Password</label>
                             <input type="password" class="form-control" id="password_confirmation"
                                 name="password_confirmation" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="role" class="form-label">Jabatan</label>
-                            <select class="form-select @error('role') is-invalid @enderror" id="role"
-                                name="role" required>
-                                <option value="">-- Pilih Jabatan --</option>
-                                <option value="Kepala Rekam Medik"
-                                    {{ old('role') == 'Kepala Rekam Medik' ? 'selected' : '' }}>Kepala Rekam Medik
-                                </option>
-                                <option value="Farmasi" {{ old('role') == 'Farmasi' ? 'selected' : '' }}>Farmasi
-                                </option>
-                                <option value="Kasir" {{ old('role') == 'Kasir' ? 'selected' : '' }}>Kasir</option>
-                                <option value="Dokter" {{ old('role') == 'Dokter' ? 'selected' : '' }}>Dokter</option>
-                                <option value="Petugas Loket" {{ old('role') == 'Petugas Loket' ? 'selected' : '' }}>
-                                    Petugas Loket</option>
-                            </select>
-                            @error('role')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -159,6 +159,21 @@
                             @enderror
                         </div>
                         <div class="mb-3">
+                            <label for="edit_role" class="form-label">Jabatan</label>
+                            <select class="form-select @error('role') is-invalid @enderror" id="edit_role"
+                                name="role" required>
+                                <option value="">-- Pilih Jabatan --</option>
+                                <option value="Kepala Rekam Medik">Kepala Rekam Medik</option>
+                                <option value="Farmasi">Farmasi</option>
+                                <option value="Kasir">Kasir</option>
+                                <option value="Dokter">Dokter</option>
+                                <option value="Petugas Loket">Petugas Loket</option>
+                            </select>
+                            @error('role')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="mb-3">
                             <label for="edit_username" class="form-label">Username</label>
                             <input type="text" class="form-control @error('username') is-invalid @enderror"
                                 id="edit_username" name="username" required>
@@ -179,21 +194,6 @@
                             <label for="edit_password_confirmation" class="form-label">Konfirmasi Password</label>
                             <input type="password" class="form-control" id="edit_password_confirmation"
                                 name="password_confirmation">
-                        </div>
-                        <div class="mb-3">
-                            <label for="edit_role" class="form-label">Jabatan</label>
-                            <select class="form-select @error('role') is-invalid @enderror" id="edit_role"
-                                name="role" required>
-                                <option value="">-- Pilih Jabatan --</option>
-                                <option value="Kepala Rekam Medik">Kepala Rekam Medik</option>
-                                <option value="Farmasi">Farmasi</option>
-                                <option value="Kasir">Kasir</option>
-                                <option value="Dokter">Dokter</option>
-                                <option value="Petugas Loket">Petugas Loket</option>
-                            </select>
-                            @error('role')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
                         </div>
                     </div>
                     <div class="modal-footer">

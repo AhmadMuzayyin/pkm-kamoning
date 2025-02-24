@@ -87,6 +87,12 @@
                     @csrf
                     <div class="modal-body">
                         <div class="mb-3">
+                            <label for="tanggal_masuk" class="form-label">Tanggal Masuk</label>
+                            <input type="date" class="form-control" id="tanggal_masuk" name="tanggal_masuk" required
+                                value="{{ date('Y-m-d') }}">
+                            <div class="invalid-feedback" id="tanggal_masuk-error"></div>
+                        </div>
+                        <div class="mb-3">
                             <label for="nama" class="form-label">Nama Obat</label>
                             <input type="text" class="form-control" id="nama" name="nama" required>
                             <div class="invalid-feedback" id="nama-error"></div>
@@ -100,12 +106,6 @@
                             <label for="stok" class="form-label">Jumlah Stok</label>
                             <input type="number" class="form-control" id="stok" name="stok" required>
                             <div class="invalid-feedback" id="stok-error"></div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="tanggal_masuk" class="form-label">Tanggal Masuk</label>
-                            <input type="date" class="form-control" id="tanggal_masuk" name="tanggal_masuk" required
-                                value="{{ date('Y-m-d') }}">
-                            <div class="invalid-feedback" id="tanggal_masuk-error"></div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -130,6 +130,12 @@
                     @method('PUT')
                     <div class="modal-body">
                         <div class="mb-3">
+                            <label for="edit_tanggal_masuk" class="form-label">Tanggal Masuk</label>
+                            <input type="date" class="form-control" id="edit_tanggal_masuk" name="tanggal_masuk"
+                                required>
+                            <div class="invalid-feedback" id="edit_tanggal_masuk-error"></div>
+                        </div>
+                        <div class="mb-3">
                             <label for="edit_nama" class="form-label">Nama Obat</label>
                             <input type="text" class="form-control" id="edit_nama" name="nama" required>
                             <div class="invalid-feedback" id="edit_nama-error"></div>
@@ -143,12 +149,6 @@
                             <label for="edit_stok" class="form-label">Jumlah Stok</label>
                             <input type="number" class="form-control" id="edit_stok" name="stok" required>
                             <div class="invalid-feedback" id="edit_stok-error"></div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="edit_tanggal_masuk" class="form-label">Tanggal Masuk</label>
-                            <input type="date" class="form-control" id="edit_tanggal_masuk" name="tanggal_masuk"
-                                required>
-                            <div class="invalid-feedback" id="edit_tanggal_masuk-error"></div>
                         </div>
                     </div>
                     <div class="modal-footer">

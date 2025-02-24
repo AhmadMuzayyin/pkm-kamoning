@@ -34,6 +34,8 @@ Route::middleware('auth')->group(function () {
         Route::delete('loket/destroy/{kunjungan}', 'destroy')->name('destroy');
 
         Route::post('loket/{kunjungan}/pendaftaran', 'pendaftaran')->name('pendaftaran');
+        Route::put('/loket/pendaftaran/{pendaftaran}', 'updatePendaftaran')->name('updatePendaftaran');
+        Route::delete('loket/destroy/{pendaftaran}/destroyPendaftaran', 'destroyPendaftaran')->name('destroyPendaftaran');
     });
     Route::controller(PasienController::class)->as('pasien.')->group(function () {
         Route::get('/pasien', 'index')->name('index');
