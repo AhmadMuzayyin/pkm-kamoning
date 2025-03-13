@@ -1,7 +1,7 @@
 <x-guest-layout>
 
     <div class="text-center mb-6 mt-10">
-        <h1 class="text-2xl font-semibold text-gray-900">REKAM MEDIKS</h1>
+        <h1 class="text-2xl font-semibold text-gray-900">SISTEM INFORMASI REKAM MEDIK</h1>
     </div>
 
     <!-- Session Status -->

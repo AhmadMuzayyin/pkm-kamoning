@@ -11,8 +11,14 @@
                 <div class="col-md-12">
                     <div class="card bg-main">
                         <div class="card-body">
-                            @if (session('error'))
-                                <div class="alert alert-danger">{{ session('error') }}</div>
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul class="mb-0">
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
                             @endif
                             <form class="text-dark"
                                 action="{{ $kunjungan->exists ? route('loket.update', $kunjungan->id) : route('loket.store') }}"
@@ -102,7 +108,8 @@
                                     <label for="umur"
                                         class="form-label @error('umur') is-invalid @enderror">Umur</label>
                                     <input type="numeric" class="form-control" id="umur" name="umur"
-                                        value="{{ old('umur', $kunjungan->umur) }}">
+                                        value="{{ old('umur', $kunjungan->umur) }}" readonly>
+                                    <small class="text-danger text-small fst-italic">Umur dibuat secara otomatis</small>
                                     @error('umur')
                                         <div class="invalid-feedback">
                                             {{ $message }}
@@ -200,5 +207,16 @@
             </div>
         </div>
     </div>
-    </div>
+    @push('scripts')
+        <script>
+            $(document).ready(function() {
+                $('#tanggal_lahir').change(function() {
+                    var dob = new Date($(this).val());
+                    var today = new Date();
+                    var age = Math.floor((today - dob) / (365.25 * 24 * 60 * 60 * 1000));
+                    $('#umur').val(age);
+                });
+            });
+        </script>
+    @endpush
 </x-app-layout>

@@ -66,20 +66,15 @@ class LoketController extends Controller
         $request->validate([
             'nama_pasien' => 'required|string|max:255',
             'alamat' => 'required|string|max:500',
-            'telpon' => 'required|string|regex:/^08[0-9]{8,13}$/', // Format nomor HP Indonesia
+            'telpon' => 'required|string|regex:/^08[0-9]{8,13}$/',
             'tempat_lahir' => 'required|string|max:255',
             'tanggal_lahir' => 'required|date|before_or_equal:today',
-            'umur' => 'required|integer|min:0|max:120', // Batasan umur 0 - 120 tahun
+            'umur' => 'required|integer|min:0|max:120',
             'nik'             => [
                 'required',
                 'numeric',
                 'digits:16',
-                Rule::unique('kunjungans')->ignore($kunjungan->id), // Agar bisa tetap menggunakan NIK yang sama
-            ],
-            'no_rekam_medik'  => [
-                'required',
-                'integer',
-                Rule::unique('kunjungans')->ignore($kunjungan->id), // Agar tetap bisa pakai No. Rekam Medik yang sama
+                Rule::unique('kunjungans')->ignore($kunjungan->id),
             ],
             'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
             'jenis_pelayanan' => 'required|in:BPJS,Umum',

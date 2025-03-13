@@ -1,7 +1,17 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="fs-4 fw-semibold text-dark mb-0">
-            {{ __('Data Pasien') }}
+            @php
+                if (request()->get('poli') == 'Umum') {
+                    echo 'Pasien Umum';
+                } elseif (request()->get('poli') == 'Gigi') {
+                    echo 'Pasien Gigi';
+                } elseif (request()->get('poli') == 'KIA') {
+                    echo 'Pasien KIA';
+                } else {
+                    echo 'Semua Pasien';
+                }
+            @endphp
         </h2>
     </x-slot>
 
